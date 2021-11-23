@@ -15,7 +15,7 @@ async function main() {
 
   // We get the contract to deploy
 
-  const ownerAddress = process.env.owneraddress!;
+  const ownerAddress = process.env.OWNERADDRESS!;
 
   const Token = await ethers.getContractFactory("Token");
   const token = await Token.deploy(ownerAddress);

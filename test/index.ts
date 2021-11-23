@@ -1,19 +1,19 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-describe("Greeter", function () {
+describe("Token", function () {
   it("Should return the new greeting once it's changed", async function () {
-    const Greeter = await ethers.getContractFactory("Greeter");
-    const greeter = await Greeter.deploy("Hello, world!");
-    await greeter.deployed();
+    const ownerAddress = process.env.OWNERADDRESS!;
+    const Token = await ethers.getContractFactory("Token");
+    const token = await Token.deploy(ownerAddress);
+    await token.deployed();
 
-    expect(await greeter.greet()).to.equal("Hello, world!");
+    const totalSupply = await token.totalSupply();
+    console.log(totalSupply.toString());
 
-    const setGreetingTx = await greeter.setGreeting("Hola, mundo!");
+    expect(await token.totalSupply()).to.equal("1000000000000");
 
-    // wait until the transaction is mined
-    await setGreetingTx.wait();
-
-    expect(await greeter.greet()).to.equal("Hola, mundo!");
+    const ownerBalance = await token.balanceOf(ownerAddress);
+    expect(ownerBalance).equal("1000000000000");
   });
 });

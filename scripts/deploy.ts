@@ -14,8 +14,11 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
+
+  const ownerAddress = process.env.owneraddress!;
+
   const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy("");
+  const token = await Token.deploy(ownerAddress);
 
   await token.deployed();
 

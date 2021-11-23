@@ -8,7 +8,7 @@ contract Token is ERC20 {
     string public constant SYMBOL = "MEME";
     uint256 public constant TOTAL_SUPPLY = 1000000000000;
 
-    constructor(address _manager) ERC20(NAME, SYMBOL) {
-        _mint(_manager, TOTAL_SUPPLY);
+    constructor(address _owner) ERC20(NAME, SYMBOL) {
+        _mint(_owner, TOTAL_SUPPLY);
     }
 }

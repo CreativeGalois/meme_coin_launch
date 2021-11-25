@@ -71,6 +71,10 @@ contract TokenManagement {
             "Not have enough funds"
         );
 
+        treasuryWallet -= (_tokenAmountToSell * TREASURY_BP) / 1000;
+        rewardDistribution -= (_tokenAmountToSell * LIQUIDITY_BP) / 1000;
+        liquidity -= (_tokenAmountToSell * LIQUIDITY_BP) / 1000;
+
         bool sent = token.transferFrom(
             msg.sender,
             address(this),

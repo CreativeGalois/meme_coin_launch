@@ -33,7 +33,7 @@ contract TokenManagement {
         treasuryAddress2 = _treasuryAddress2;
     }
 
-    function buy() public payable returns (uint256 tokenAmount) {
+    function buy() public payable returns (uint256) {
         // uint256 currentSupply = token.totalSupply();
         // require(currentSupply + _amount < TOTAL_SUPPLY, "Can not buy token");
         // treasuryWallet += (_amount * TREASURY_BP) / 1000;
@@ -55,5 +55,27 @@ contract TokenManagement {
         return amountToBuy;
     }
 
-    function sell(uint256 _amount) public {}
+    function sell(uint256 _tokenAmountToSell) public {
+        require(_tokenAmountToSell > 0, "Greater than zero");
+
+        uint256 userBalance = token.balanceOf(msg.sender);
+        require(userBalance >= _tokenAmountToSell, "Your balance is lower");
+
+        uint256 amountOfBNBToTransfer = _tokenAmountToSell / TOKENSPERBNB;
+        uint256 ownerBNBBalance = address(this).balance;
+        require(
+            ownerBNBBalance >= amountOfBNBToTransfer,
+            "Not have enough funds"
+        );
+
+        bool sent = token.transferFrom(
+            msg.sender,
+            address(this),
+            _tokenAmountToSell
+        );
+        require(sent, "Failed to transfer tokens");
+
+        (sent, ) = msg.sender.call{value: amountOfBNBToTransfer}("");
+        require(sent, "Failed to send BNB to the user");
+    }
 }

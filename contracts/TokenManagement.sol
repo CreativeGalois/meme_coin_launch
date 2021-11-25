@@ -46,6 +46,10 @@ contract TokenManagement {
         uint256 tokenManagementBalance = token.balanceOf(address(this));
         require(tokenManagementBalance >= amountToBuy, "Not have enough token");
 
+        treasuryWallet += (amountToBuy * TREASURY_BP) / 1000;
+        rewardDistribution += (amountToBuy * LIQUIDITY_BP) / 1000;
+        liquidity += (amountToBuy * LIQUIDITY_BP) / 1000;
+
         bool sent = token.transfer(msg.sender, amountToBuy);
         require(sent, "Failed to transfer token to user");
 

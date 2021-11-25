@@ -20,6 +20,11 @@ contract TokenManagement {
     address public treasuryAddress2;
 
     event BuyTokens(address buyer, uint256 amountOfBNB, uint256 amountOfTokens);
+    event SellTokens(
+        address seller,
+        uint256 amountOfTokens,
+        uint256 amountOfBNB
+    );
 
     constructor(
         address _tokenAddress,
@@ -71,5 +76,7 @@ contract TokenManagement {
 
         (sent, ) = msg.sender.call{value: amountOfBNBToTransfer}("");
         require(sent, "Failed to send BNB to the user");
+
+        emit SellTokens(msg.sender, _tokenAmountToSell, amountOfBNBToTransfer);
     }
 }

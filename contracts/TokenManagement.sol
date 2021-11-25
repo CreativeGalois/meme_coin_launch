@@ -8,16 +8,19 @@ contract TokenManagement {
 
     uint256 public constant TOKENSPERBNB = 100;
     uint256 public constant TOTAL_SUPPLY = 1000000000000;
-    uint128 public constant TREASURY_BP = 200;
-    uint128 public constant REWARD_BP = 100;
-    uint128 public constant LIQUIDITY_BP = 200;
+    uint128 public constant TREASURY_BP = 2;
+    uint128 public constant REWARD_BP = 1;
+    uint128 public constant LIQUIDITY_BP = 2;
     uint256 public currentAmount = 0;
+    uint256 public constant maximumAmountOfTreasury = 10000000000;
     uint256 private treasuryWallet = 0;
     uint256 private rewardDistribution = 0;
     uint256 private liquidity = 0;
     address private owner;
     address public treasuryAddress1;
     address public treasuryAddress2;
+
+    uint256 public launchDay;
 
     event BuyTokens(address buyer, uint256 amountOfBNB, uint256 amountOfTokens);
     event SellTokens(
@@ -36,6 +39,8 @@ contract TokenManagement {
         owner = _owner;
         treasuryAddress1 = _treasuryAddress1;
         treasuryAddress2 = _treasuryAddress2;
+
+        launchDay = block.timestamp;
     }
 
     function buy() public payable returns (uint256) {
@@ -46,8 +51,14 @@ contract TokenManagement {
         uint256 tokenManagementBalance = token.balanceOf(address(this));
         require(tokenManagementBalance >= amountToBuy, "Not have enough token");
 
-        treasuryWallet += (amountToBuy * TREASURY_BP) / 1000;
-        rewardDistribution += (amountToBuy * LIQUIDITY_BP) / 1000;
+        if (
+            treasuryWallet + (amountToBuy * TREASURY_BP) / 100 <
+            maximumAmountOfTreasury
+        ) {
+            treasuryWallet += (amountToBuy * TREASURY_BP) / 100;
+        }
+
+        rewardDistribution += (amountToBuy * LIQUIDITY_BP) / 100;
         liquidity += (amountToBuy * LIQUIDITY_BP) / 1000;
 
         bool sent = token.transfer(msg.sender, amountToBuy);
@@ -71,9 +82,9 @@ contract TokenManagement {
             "Not have enough funds"
         );
 
-        treasuryWallet -= (_tokenAmountToSell * TREASURY_BP) / 1000;
-        rewardDistribution -= (_tokenAmountToSell * LIQUIDITY_BP) / 1000;
-        liquidity -= (_tokenAmountToSell * LIQUIDITY_BP) / 1000;
+        treasuryWallet -= (_tokenAmountToSell * TREASURY_BP) / 100;
+        rewardDistribution -= (_tokenAmountToSell * LIQUIDITY_BP) / 100;
+        liquidity -= (_tokenAmountToSell * LIQUIDITY_BP) / 100;
 
         bool sent = token.transferFrom(
             msg.sender,
@@ -86,5 +97,28 @@ contract TokenManagement {
         require(sent, "Failed to send BNB to the user");
 
         emit SellTokens(msg.sender, _tokenAmountToSell, amountOfBNBToTransfer);
+    }
+
+    function widthdrawByTreasury(uint256 _amount) public {
+        require(
+            msg.sender == treasuryAddress1 || msg.sender == treasuryAddress2,
+            "Can not widthraw"
+        );
+
+        if (launchDay - block.timestamp <= 30 days) {
+            require(
+                _amount <= (treasuryWallet * 5) / 100,
+                "Can not withdraw more than 5%"
+            );
+            bool sent = token.transferFrom(msg.sender, address(this), _amount);
+            require(sent, "Failed to transfer tokens");
+        } else {
+            require(
+                _amount <= (treasuryWallet * 1) / 100,
+                "Can not withdraw more than 1%"
+            );
+            bool sent = token.transferFrom(msg.sender, address(this), _amount);
+            require(sent, "Failed to transfer tokens");
+        }
     }
 }

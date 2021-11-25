@@ -34,12 +34,6 @@ contract TokenManagement {
     }
 
     function buy() public payable returns (uint256) {
-        // uint256 currentSupply = token.totalSupply();
-        // require(currentSupply + _amount < TOTAL_SUPPLY, "Can not buy token");
-        // treasuryWallet += (_amount * TREASURY_BP) / 1000;
-        // rewardDistribution += (_amount * REWARD_BP) / 1000;
-        // liquidity += (_amount * LIQUIDITY_BP) / 1000;
-        // _mint(msg.sender, _amount);
         require(msg.value > 0, "Send BNB to buy some tokens");
 
         uint256 amountToBuy = msg.value * TOKENSPERBNB;

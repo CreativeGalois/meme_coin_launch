@@ -7,8 +7,8 @@ use(solidity);
 
 describe("Token Management", function () {
   let owner: SignerWithAddress;
-  let treasury1;
-  let treasury2;
+  let treasury1: SignerWithAddress;
+  let treasury2: SignerWithAddress;
   let addr1: SignerWithAddress;
   let addrs;
   const TOTAL_SUPPLY = 1000000000000;
@@ -31,14 +31,14 @@ describe("Token Management", function () {
     );
     tokenManagementContract = await TokenManagementContract.deploy(
       tokenContract.address,
-      owner.toString(),
-      treasury1.toString(),
-      treasury2.toString()
+      owner.address,
+      treasury1.address,
+      treasury2.address
     );
 
     await tokenContract.transfer(
       tokenManagementContract.address,
-      ethers.utils.parseEther(TOTAL_SUPPLY.toString())
+      ethers.utils.parseEther("1000000000000")
     );
 
     tokenMangementSupply = await tokenContract.balanceOf(

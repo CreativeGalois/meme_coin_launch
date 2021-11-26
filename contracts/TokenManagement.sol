@@ -35,7 +35,7 @@ contract TokenManagement {
         address _treasuryAddress1,
         address _treasuryAddress2
     ) {
-        Token(_tokenAddress);
+        token = Token(_tokenAddress);
         owner = _owner;
         treasuryAddress1 = _treasuryAddress1;
         treasuryAddress2 = _treasuryAddress2;

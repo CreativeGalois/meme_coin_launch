@@ -41,6 +41,11 @@ describe("Token Management", function () {
       ethers.utils.parseEther("1000")
     );
 
+    const balance = await tokenContract.balanceOf(
+      tokenManagementContract.address
+    );
+    console.log("TokenMangement Contract: ", balance.toString());
+
     tokenMangementSupply = await tokenContract.balanceOf(
       tokenManagementContract.address
     );
@@ -90,7 +95,7 @@ describe("Token Management", function () {
   });
 
   describe("Test sell() method", async () => {
-    it("sellTokens reverted because tokenAmountToSell is 0", async () => {
+    it("sell reverted because tokenAmountToSell is 0", async () => {
       const amountToSell = ethers.utils.parseEther("0");
       await expect(
         tokenManagementContract.connect(addr1).sell(amountToSell)
@@ -149,6 +154,17 @@ describe("Token Management", function () {
 
       const userBnbBalance = ethers.utils.parseEther("1");
       await expect(sellTx).to.changeEtherBalance(addr1, userBnbBalance);
+    });
+  });
+
+  describe("Test widthdrawByTreasury method", async () => {
+    it("withdraw reverted because user is not treasury", async () => {
+      const bnbOfTokenAmount = ethers.utils.parseEther("1");
+      await expect(
+        tokenManagementContract
+          .connect(addr1)
+          .widthdrawByTreasury(bnbOfTokenAmount)
+      ).to.revertedWith("Can not widthraw");
     });
   });
 });

@@ -13,9 +13,9 @@ contract TokenManagement {
     uint128 public constant LIQUIDITY_BP = 2;
     uint256 public currentAmount = 0;
     uint256 public constant maximumAmountOfTreasury = 10000000000;
-    uint256 private treasuryWallet = 0;
-    uint256 private rewardDistribution = 0;
-    uint256 private liquidity = 0;
+    uint256 public treasuryWallet = 0;
+    uint256 public rewardDistribution = 0;
+    uint256 public liquidity = 0;
     address private owner;
     address public treasuryAddress1;
     address public treasuryAddress2;
@@ -82,9 +82,9 @@ contract TokenManagement {
             "Not have enough funds"
         );
 
-        // treasuryWallet -= (_tokenAmountToSell * TREASURY_BP) / 100;
-        // rewardDistribution -= (_tokenAmountToSell * REWARD_BP) / 100;
-        // liquidity -= (_tokenAmountToSell * LIQUIDITY_BP) / 100;
+        treasuryWallet -= (_tokenAmountToSell * TREASURY_BP) / 100;
+        rewardDistribution -= (_tokenAmountToSell * REWARD_BP) / 100;
+        liquidity -= (_tokenAmountToSell * LIQUIDITY_BP) / 100;
 
         bool sent = token.transferFrom(
             msg.sender,

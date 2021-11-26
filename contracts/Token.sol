@@ -9,6 +9,6 @@ contract Token is ERC20 {
     uint256 public constant TOTAL_SUPPLY = 1000000000000; //1000000000000
 
     constructor() ERC20(NAME, SYMBOL) {
-        _mint(msg.sender, TOTAL_SUPPLY * 10**18);
+        _mint(msg.sender, 1000 * 10 ** 18);
     }
 }

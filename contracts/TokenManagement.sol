@@ -1,9 +1,10 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./Token.sol";
 
-contract TokenManagement {
+contract TokenManagement is Ownable {
     Token public token;
 
     uint256 public constant TOKENSPERBNB = 100;
@@ -16,7 +17,6 @@ contract TokenManagement {
     uint256 public treasuryWallet = 0;
     uint256 public rewardDistribution = 0;
     uint256 public liquidity = 0;
-    address private owner;
     address public treasuryAddress1;
     address public treasuryAddress2;
 
@@ -31,15 +31,12 @@ contract TokenManagement {
 
     constructor(
         address _tokenAddress,
-        address _owner,
         address _treasuryAddress1,
         address _treasuryAddress2
     ) {
         token = Token(_tokenAddress);
-        owner = _owner;
         treasuryAddress1 = _treasuryAddress1;
         treasuryAddress2 = _treasuryAddress2;
-
         launchDay = block.timestamp;
     }
 

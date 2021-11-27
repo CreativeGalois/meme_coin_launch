@@ -31,7 +31,6 @@ describe("Token Management", function () {
     );
     tokenManagementContract = await TokenManagementContract.deploy(
       tokenContract.address,
-      owner.address,
       treasury1.address,
       treasury2.address
     );

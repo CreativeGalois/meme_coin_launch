@@ -15,14 +15,23 @@ async function main() {
 
   // We get the contract to deploy
 
-  const ownerAddress = process.env.OWNERADDRESS!;
+  const TREASURY1_ADDRESS = process.env.TREASURY1_ADDRESS!;
+  const TREASURY2_ADDRESS = process.env.TREASURY2_ADDRESS!;
 
   const Token = await ethers.getContractFactory("Token");
-  const token = await Token.deploy(ownerAddress);
-
+  const token = await Token.deploy();
   await token.deployed();
-
+  const tokenAddress = token.address;
   console.log("Token deployed to:", token.address);
+
+  const TokenMangement = await ethers.getContractFactory("TokenManagement");
+  const tokenMangement = await TokenMangement.deploy(
+    tokenAddress,
+    TREASURY1_ADDRESS,
+    TREASURY2_ADDRESS
+  );
+  await tokenMangement.deployed();
+  console.log("Token Mangement Deployed: ", tokenMangement.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -52,6 +52,12 @@ const config: HardhatUserConfig = {
       accounts: { mnemonic: mnemonic },
     },
   },
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts",
+  },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: "USD",

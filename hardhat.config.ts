@@ -7,6 +7,8 @@ import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
 
+import { mnemonic } from "./secrets.json";
+
 dotenv.config();
 
 // This is a sample Hardhat task. To learn how to create your own go to
@@ -37,14 +39,18 @@ const config: HardhatUserConfig = {
       url: "http://127.0.0.1:8545",
     },
     hardhat: {},
-    // BSCTestnet: {
-
-    // },
-    // ropsten: {
-    //   url: process.env.ROPSTEN_URL || "",
-    //   accounts:
-    //     process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
-    // },
+    testnet: {
+      url: "https://data-seed-prebsc-1-s1.binance.org:8545",
+      chainId: 97,
+      gasPrice: 20000000000,
+      accounts: { mnemonic: mnemonic },
+    },
+    mainnet: {
+      url: "https://bsc-dataseed.binance.org/",
+      chainId: 56,
+      gasPrice: 20000000000,
+      accounts: { mnemonic: mnemonic },
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
